@@ -8,6 +8,7 @@ Unreleased
 ==========
 - Autofix for :ref:`ASYNC910 <async910>` / :ref:`ASYNC911 <async911>` no longer inserts checkpoints inside ``except`` clauses (which would trigger :ref:`ASYNC120 <async120>`); instead the checkpoint is added at the top of the function or of the enclosing loop. `(issue #403) <https://github.com/python-trio/flake8-async/issues/403>`_
 - :ref:`ASYNC910 <async910>` and :ref:`ASYNC911 <async911>` now accept ``__aenter__`` / ``__aexit__`` methods when the partner method provides the checkpoint, or when only one of the two is defined on a class that inherits from another class (charitably assuming the partner is inherited and contains a checkpoint). `(issue #441) <https://github.com/python-trio/flake8-async/issues/441>`_
+- :ref:`ASYNC101 <async101>` now also triggers for common third-party context managers that open internal cancel scopes (currently ``httpx.Client`` and ``httpx.AsyncClient``). `(issue #350) <https://github.com/python-trio/flake8-async/issues/350>`_
 
 25.7.1
 ======

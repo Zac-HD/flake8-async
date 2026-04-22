@@ -55,6 +55,8 @@ class Visitor101(Flake8AsyncVisitor_cst):
                 # cancel scopes
                 or with_has_call(node, "timeout", "timeout_at", base="asyncio")
                 or with_has_call(node, *cancel_scope_names, base=("trio", "anyio"))
+                # 3rd-party context managers with internal cancel scopes
+                or with_has_call(node, "AsyncClient", "Client", base="httpx")
             )
         )
 
