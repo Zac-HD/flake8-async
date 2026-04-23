@@ -345,3 +345,23 @@ async def foo():
         await x.aclose(bar=foo)  # ASYNC102: 8, Statement("try/finally", lineno-9)
         await x.aclose(*foo)  # ASYNC102: 8, Statement("try/finally", lineno-10)
         await x.aclose(None)  # ASYNC102: 8, Statement("try/finally", lineno-11)
+
+
+# exclude `await *.lowlevel.cancel_shielded_checkpoint()`, which is
+# explicitly a schedule-but-not-cancel point.
+async def foo_cancel_shielded_checkpoint():
+    try:
+        ...
+    except BaseException:
+        await trio.lowlevel.cancel_shielded_checkpoint()
+    finally:
+        await trio.lowlevel.cancel_shielded_checkpoint()
+
+
+# still raise errors if there are args, or a different name
+async def foo_cancel_shielded_checkpoint_bad():
+    try:
+        ...
+    finally:
+        await trio.lowlevel.cancel_shielded_checkpoint(foo)  # ASYNC102: 8, Statement("try/finally", lineno-3)
+        await trio.lowlevel.checkpoint()  # ASYNC102: 8, Statement("try/finally", lineno-4)
